@@ -964,21 +964,6 @@ export default function App() {
   return (
     <div className="bg-cream font-sans" style={{ cursor: 'none' }}>
         
-            .font-serif { font-family: 'Playfair Display', serif; } .font-sans { font-family: 'Inter', sans-serif; }
-            .bg-green-900 { background-color: var(--color-green-900); } .bg-green-800 { background-color: var(--color-green-800); }
-            .bg-green-700 { background-color: var(--color-green-700); } .bg-green-500 { background-color: var(--color-green-500); }
-            .bg-gold-500 { background-color: var(--color-gold-500); } .bg-cream { background-color: var(--color-cream); }
-            .text-gold-200 { color: var(--color-gold-200); } .text-gold-300 { color: var(--color-gold-300); }
-            .text-gold-400 { color: var(--color-gold-400); } .border-gold-900 { border-color: var(--color-gold-900); }
-            .border-gold-400 { border-color: var(--color-gold-400); } .text-green-900 { color: var(--color-green-900); }
-            .text-dark-primary { color: var(--color-dark-primary); } .text-dark-secondary { color: var(--color-dark-secondary); }
-            .hover\\:bg-green-600:hover { background-color: #225555; } .hover\\:bg-gold-400:hover { background-color: var(--color-gold-400); }
-            .hover\\:text-gold-300:hover { color: var(--color-gold-300); }
-            .aspect-w-16 { position: relative; padding-bottom: 56.25%; }
-            .aspect-h-9 { /* No additional styles needed here */ }
-            .aspect-w-16 > iframe, .aspect-w-16 > video { position: absolute; width: 100%; height: 100%; top: 0; left: 0; }
-            .pb-2\\/3 { padding-bottom: 66.66%; }
-        `}</style>
         <FontLoader />
         <CustomCursor currentPage={currentPage} />
         <Header setCurrentPage={setCurrentPage} />
