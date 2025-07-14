@@ -963,16 +963,7 @@ export default function App() {
 
   return (
     <div className="bg-cream font-sans" style={{ cursor: 'none' }}>
-        <style>{`
-            :root {
-                --color-green-900: #0c1a1a; --color-green-800: #122b2b; --color-green-700: #1a3c3c;
-                --color-green-500: #2E8555;
-                --color-gold-900: #4d3800; --color-gold-500: #FFD700; --color-gold-400: #FFDE33;
-                --color-gold-300: #FFE566; --color-gold-200: #FFEC99;
-                --color-cream: #FBF8F1;
-                --color-dark-primary: #1a3c3c;
-                --color-dark-secondary: #3a5a5a;
-            }
+        
             .font-serif { font-family: 'Playfair Display', serif; } .font-sans { font-family: 'Inter', sans-serif; }
             .bg-green-900 { background-color: var(--color-green-900); } .bg-green-800 { background-color: var(--color-green-800); }
             .bg-green-700 { background-color: var(--color-green-700); } .bg-green-500 { background-color: var(--color-green-500); }
