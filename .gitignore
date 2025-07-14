@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -9,6 +10,12 @@
 /coverage
 
 # production
+=======
+# dependencias
+/node_modules
+
+# producción
+>>>>>>> 6c3b6970d0cc8f6437f51bbb2c8f78547a63bf99
 /build
 
 # misc
@@ -17,7 +24,13 @@
 .env.development.local
 .env.test.local
 .env.production.local
+<<<<<<< HEAD
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+=======
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+>>>>>>> 6c3b6970d0cc8f6437f51bbb2c8f78547a63bf99
