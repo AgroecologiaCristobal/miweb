@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-// Para las animaciones avanzadas, este código asume que 'framer-motion' está disponible.
-// Es la librería estándar de la industria para animaciones complejas en React.
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+// Importamos solo lo necesario de 'framer-motion' para evitar advertencias de variables no utilizadas.
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 
 // --- TIPOGRAFÍA (Cargada desde Google Fonts) ---
 const FontLoader = () => {
@@ -30,8 +29,7 @@ const CartIcon = () => (
 );
 
 const CheckIcon = ({ className }) => {
-  // The className prop is now applied directly to the component where it's used,
-  // making the SVG itself simpler and less prone to parse errors.
+  // La prop className se aplica directamente al componente donde se usa.
   return (
     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"></path></svg>
   );
@@ -44,11 +42,65 @@ const ArrowRightIcon = () => (
 );
 
 
-// --- CURSOR PERSONALIZADO BÁSICO (sin SVGs complejos) ---
-// Se ha eliminado el componente CustomCursor para resolver el error de Parse Error en Netlify.
-// Si deseas un cursor personalizado, se recomienda implementarlo con un enfoque más simple
-// o con una librería que no cause conflictos con el compilador de Netlify.
-/*
+// --- CURSOR DE MONEDAS DE ORO REALISTAS QUE CAEN PLANAS ---
+const GoldCoinCursor = () => {
+    const coinSize = 20; // Tamaño de la moneda (ancho/alto)
+    const stackHeight = 10; // Altura de la pila base
+    const numCoinsInStack = 3; // Número de monedas en la pila estática
+
+    return (
+        <motion.div
+            className="relative"
+            style={{ width: coinSize, height: coinSize + stackHeight * numCoinsInStack }} // Ajustar tamaño del contenedor
+        >
+            {/* Definiciones de gradiente y filtro de sombra para las monedas */}
+            <svg width="0" height="0">
+                <defs>
+                    <radialGradient id="goldGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                        <stop offset="0%" stopColor="#FFD700" /> {/* Oro brillante */}
+                        <stop offset="50%" stopColor="#DAA520" /> {/* Tono medio de oro */}
+                        <stop offset="100%" stopColor="#B8860B" /> {/* Oro oscuro */}
+                    </radialGradient>
+                    <filter id="coinShadow">
+                        <feDropShadow dx="1" dy="1" stdDeviation="1" floodColor="#000" floodOpacity="0.5"/>
+                    </filter>
+                </defs>
+            </svg>
+
+            {/* Pila de monedas estáticas */}
+            {[...Array(numCoinsInStack)].map((_, i) => (
+                <svg key={`stack-${i}`} className="absolute" style={{ top: i * (stackHeight / numCoinsInStack), left: 0 }} width={coinSize} height={coinSize}>
+                    <ellipse cx={coinSize / 2} cy={coinSize / 2} rx={coinSize / 2} ry={coinSize / 2.5} fill="url(#goldGradient)" filter="url(#coinShadow)" />
+                </svg>
+            ))}
+
+            {/* Moneda animada cayendo plana */}
+            <motion.svg
+                className="absolute"
+                style={{ left: 0 }}
+                width={coinSize}
+                height={coinSize}
+                initial={{ y: -coinSize * 2, opacity: 0, rotateX: 0 }} // Inicia arriba, transparente, sin rotación
+                animate={{
+                    y: [-coinSize * 2, stackHeight * numCoinsInStack], // Cae hasta la pila
+                    opacity: [0, 1, 1, 0], // Aparece, se mantiene, se desvanece
+                    rotateX: [0, 90, 90, 0], // Rota para caer plana
+                    transition: {
+                        duration: 1.5, // Duración de la caída
+                        ease: ["easeIn", "linear", "easeOut"], // Aceleración, lineal, desaceleración
+                        repeat: Infinity, // Repite infinitamente
+                        repeatDelay: 0.5 // Retraso antes de que caiga la siguiente moneda
+                    }
+                }}
+            >
+                <ellipse cx={coinSize / 2} cy={coinSize / 2} rx={coinSize / 2} ry={coinSize / 2.5} fill="url(#goldGradient)" filter="url(#coinShadow)" />
+            </motion.svg>
+        </motion.div>
+    );
+};
+
+
+// --- COMPONENTE PRINCIPAL DEL CURSOR ---
 const CustomCursor = ({ currentPage }) => {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isIdle, setIsIdle] = useState(false);
@@ -82,23 +134,16 @@ const CustomCursor = ({ currentPage }) => {
         };
     }, [currentPage]);
 
-    const variants = {
-        default: { x: mousePosition.x - 8, y: mousePosition.y - 8, backgroundColor: "#FFD700", scale: 1 },
-        idle: { x: mousePosition.x - 32, y: mousePosition.y - 32, backgroundColor: "transparent", scale: 1.2 },
-        hover: { x: mousePosition.x - 16, y: mousePosition.y - 16, height: 32, width: 32, backgroundColor: "#fff", mixBlendMode: "difference" }
-    };
-
-    // Renderiza solo un círculo básico, sin SVGs internos complejos
+    // Renderiza el GoldCoinCursor en la posición del ratón
     return (
-        <motion.div 
-            className="fixed top-0 left-0 h-4 w-4 rounded-full pointer-events-none z-50" 
-            variants={variants} 
-            animate={isHovering ? "hover" : (isIdle ? "idle" : "default")} 
-            transition={{ type: "spring", stiffness: 500, damping: 30 }}
-        />
+        <motion.div
+            className="fixed top-0 left-0 pointer-events-none z-50"
+            style={{ x: mousePosition.x, y: mousePosition.y }} // Posiciona el contenedor del cursor
+        >
+            <GoldCoinCursor />
+        </motion.div>
     );
 };
-*/
 
 
 // --- COMPONENTES REUTILIZABLES ---
@@ -252,6 +297,8 @@ const ProductCard = ({ product, small = false }) => {
 };
 
 
+// Eliminado AnimatedGuideText y su lógica relacionada ya que no se utiliza.
+/*
 const AnimatedGuideText = ({ show }) => {
     const text = "¿Primera vez aquí? Sigue explorando para conocer mi historia y mi filosofía.";
     const words = text.split(" ");
@@ -264,6 +311,7 @@ const AnimatedGuideText = ({ show }) => {
         </motion.div>
     );
 };
+*/
 
 const HistoriaInteractiva = ({ setCurrentPage }) => { // Receive setCurrentPage as prop
     const targetRef = useRef(null);
@@ -413,8 +461,9 @@ const allProducts = [
 // --- PÁGINAS COMPLETAS ---
 
 const HomePage = ({ setCurrentPage }) => {
-  const [showGuide, setShowGuide] = useState(false);
-  useEffect(() => { const timer = setTimeout(() => setShowGuide(true), 4000); return () => clearTimeout(timer); }, []);
+  // Eliminado showGuide y su lógica ya que AnimatedGuideText no se usa.
+  // const [showGuide, setShowGuide] = useState(false);
+  // useEffect(() => { const timer = setTimeout(() => setShowGuide(true), 4000); return () => clearTimeout(timer); }, []);
 
   const gateways = [
     {
@@ -1097,8 +1146,8 @@ const AgroecologiaPage = () => {
           return (
             <div className="bg-cream font-sans">
                 <FontLoader />
-                {/* Se ha eliminado el CustomCursor para resolver el error de Parse Error en Netlify. */}
-                {/* <CustomCursor currentPage={currentPage} /> */}
+                {/* CustomCursor está habilitado y usa el nuevo GoldCoinCursor */}
+                <CustomCursor currentPage={currentPage} />
                 <Header setCurrentPage={setCurrentPage} />
                 <AnimatePresence mode="wait">
                     {renderPage()}
