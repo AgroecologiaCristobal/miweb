@@ -42,16 +42,18 @@ const ArrowRightIcon = () => (
 );
 
 
-// --- CURSOR DE MONEDAS DE ORO REALISTAS QUE CAEN PLANAS ---
+// --- CURSOR DE MONEDAS DE ORO REALISTAS QUE CAEN PLANAS Y SE APILAN ---
 const GoldCoinCursor = () => {
-    const coinSize = 20; // Tamaño de la moneda (ancho/alto)
-    const stackHeight = 10; // Altura de la pila base
-    const numCoinsInStack = 3; // Número de monedas en la pila estática
+    const coinWidth = 20; // Ancho de la moneda
+    const coinHeight = 8; // Altura de la moneda (para efecto 3D aplanado)
+    const stackOverlap = 2; // Cuánto se superponen las monedas en la pila
+    const numCoinsInStack = 4; // Número de monedas visibles en la pila estática
+    const numFallingCoins = 3; // Número de monedas que caen en secuencia
 
     return (
         <motion.div
             className="relative"
-            style={{ width: coinSize, height: coinSize + stackHeight * numCoinsInStack }} // Ajustar tamaño del contenedor
+            style={{ width: coinWidth, height: coinWidth + coinHeight * numCoinsInStack }} // Ajustar tamaño del contenedor
         >
             {/* Definiciones de gradiente y filtro de sombra para las monedas */}
             <svg width="0" height="0">
@@ -69,32 +71,36 @@ const GoldCoinCursor = () => {
 
             {/* Pila de monedas estáticas */}
             {[...Array(numCoinsInStack)].map((_, i) => (
-                <svg key={`stack-${i}`} className="absolute" style={{ top: i * (stackHeight / numCoinsInStack), left: 0 }} width={coinSize} height={coinSize}>
-                    <ellipse cx={coinSize / 2} cy={coinSize / 2} rx={coinSize / 2} ry={coinSize / 2.5} fill="url(#goldGradient)" filter="url(#coinShadow)" />
+                <svg key={`stack-${i}`} className="absolute" style={{ top: i * stackOverlap, left: 0 }} width={coinWidth} height={coinHeight}>
+                    <ellipse cx={coinWidth / 2} cy={coinHeight / 2} rx={coinWidth / 2} ry={coinHeight / 2} fill="url(#goldGradient)" filter="url(#coinShadow)" />
                 </svg>
             ))}
 
-            {/* Moneda animada cayendo plana */}
-            <motion.svg
-                className="absolute"
-                style={{ left: 0 }}
-                width={coinSize}
-                height={coinSize}
-                initial={{ y: -coinSize * 2, opacity: 0, rotateX: 0 }} // Inicia arriba, transparente, sin rotación
-                animate={{
-                    y: [-coinSize * 2, stackHeight * numCoinsInStack], // Cae hasta la pila
-                    opacity: [0, 1, 1, 0], // Aparece, se mantiene, se desvanece
-                    rotateX: [0, 90, 90, 0], // Rota para caer plana
-                    transition: {
-                        duration: 1.5, // Duración de la caída
-                        ease: ["easeIn", "linear", "easeOut"], // Aceleración, lineal, desaceleración
-                        repeat: Infinity, // Repite infinitamente
-                        repeatDelay: 0.5 // Retraso antes de que caiga la siguiente moneda
-                    }
-                }}
-            >
-                <ellipse cx={coinSize / 2} cy={coinSize / 2} rx={coinSize / 2} ry={coinSize / 2.5} fill="url(#goldGradient)" filter="url(#coinShadow)" />
-            </motion.svg>
+            {/* Monedas animadas cayendo planas */}
+            {[...Array(numFallingCoins)].map((_, i) => (
+                <motion.svg
+                    key={`falling-coin-${i}`}
+                    className="absolute"
+                    style={{ left: 0, transformOrigin: 'center center' }} // Asegura la rotación desde el centro
+                    width={coinWidth}
+                    height={coinHeight}
+                    initial={{ y: -coinWidth * 2, opacity: 0, rotateX: 0, scale: 0.8 }} // Inicia arriba, transparente, sin rotación
+                    animate={{
+                        y: [ -coinWidth * 2, coinHeight * (numCoinsInStack - 1) - (coinHeight / 2) + (i * stackOverlap * 0.5) ], // Cae hasta la parte superior de la pila, con ligero offset
+                        opacity: [0, 1, 1, 0], // Aparece, se mantiene, se desvanece
+                        rotateX: [0, 90, 90, 0], // Rota para caer plana
+                        transition: {
+                            delay: i * 0.5, // Retraso para que caigan en secuencia
+                            duration: 1.2, // Duración de la caída
+                            ease: ["easeIn", "linear", "easeOut"], // Aceleración, lineal, desaceleración
+                            repeat: Infinity, // Repite infinitamente
+                            repeatDelay: numFallingCoins * 0.5 // Retraso antes de que la secuencia se repita
+                        }
+                    }}
+                >
+                    <ellipse cx={coinWidth / 2} cy={coinHeight / 2} rx={coinWidth / 2} ry={coinHeight / 2} fill="url(#goldGradient)" filter="url(#coinShadow)" />
+                </motion.svg>
+            ))}
         </motion.div>
     );
 };
@@ -103,19 +109,23 @@ const GoldCoinCursor = () => {
 // --- COMPONENTE PRINCIPAL DEL CURSOR ---
 const CustomCursor = ({ currentPage }) => {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-    const [isIdle, setIsIdle] = useState(false);
-    const [isHovering, setIsHovering] = useState(false);
-    const idleTimer = useRef(null);
+    // Eliminadas isIdle y isHovering ya que no se utilizan en la animación actual del cursor
+    // const [isIdle, setIsIdle] = useState(false);
+    // const [isHovering, setIsHovering] = useState(false);
+    const idleTimer = useRef(null); // Se mantiene por si se desea añadir lógica de inactividad o hover en el futuro.
 
     useEffect(() => {
         const mouseMove = e => {
             setMousePosition({ x: e.clientX, y: e.clientY });
-            setIsIdle(false);
+            // Eliminada lógica de isIdle y isHovering para resolver advertencias de ESLint
+            // setIsIdle(false);
             clearTimeout(idleTimer.current);
-            idleTimer.current = setTimeout(() => setIsIdle(true), 1000);
+            idleTimer.current = setTimeout(() => { /* setIsIdle(true) */ }, 1000); // Se mantiene el timer pero sin efecto visible
         };
         window.addEventListener("mousemove", mouseMove);
 
+        // Eliminada lógica de eventos de hover para resolver advertencias de ESLint
+        /*
         const interactiveElements = document.querySelectorAll('button, a, [role="button"]');
         const onMouseEnter = () => setIsHovering(true);
         const onMouseLeave = () => setIsHovering(false); 
@@ -123,22 +133,26 @@ const CustomCursor = ({ currentPage }) => {
             el.addEventListener('mouseenter', onMouseEnter);
             el.addEventListener('mouseleave', onMouseLeave); 
         });
+        */
 
         return () => {
             window.removeEventListener("mousemove", mouseMove);
             clearTimeout(idleTimer.current);
+            /*
             interactiveElements.forEach(el => {
                 el.removeEventListener('mouseenter', onMouseEnter);
                 el.removeEventListener('mouseleave', onMouseLeave); 
             });
+            */
         };
-    }, [currentPage]);
+    }, []); // currentPage se ha eliminado como dependencia ya que no se usa en la lógica interna del useEffect.
 
     // Renderiza el GoldCoinCursor en la posición del ratón
     return (
         <motion.div
             className="fixed top-0 left-0 pointer-events-none z-50"
-            style={{ x: mousePosition.x, y: mousePosition.y }} // Posiciona el contenedor del cursor
+            // Ajuste para centrar el cursor ligeramente sobre el punto del ratón
+            style={{ x: mousePosition.x - (20 / 2), y: mousePosition.y - (20 / 2) }} 
         >
             <GoldCoinCursor />
         </motion.div>
@@ -461,7 +475,7 @@ const allProducts = [
 // --- PÁGINAS COMPLETAS ---
 
 const HomePage = ({ setCurrentPage }) => {
-  // Eliminado showGuide y su lógica ya que AnimatedGuideText no se usa.
+  // Eliminado showGuide y su lógica relacionada ya que AnimatedGuideText no se usa.
   // const [showGuide, setShowGuide] = useState(false);
   // useEffect(() => { const timer = setTimeout(() => setShowGuide(true), 4000); return () => clearTimeout(timer); }, []);
 
