@@ -80,9 +80,26 @@ const ArrowRightIcon = () => (
 const CursorMonedas = () => (
     <motion.svg width="64" height="64" viewBox="0 0 64 64" >
         {[0, 1, 2, 3].map(i => (
-            <motion.circle key={i} cx="32" cy="48" r="12" fill="none" stroke="#FFD700" strokeWidth="2" initial={{ y: -15, opacity: 0 }} animate={{ y: [-15, -i * 8], opacity: 1, transition: { delay: i * 0.2 + 0.5, duration: 0.3, ease: "easeOut" } }} exit={{ y: -15, opacity: 0 }}>
-                <animate attributeName="cy" values="48;40;48" dur="1.5s" begin={`${i*0.2}s`} repeatCount="indefinite"/>
-            </motion.circle>
+            <motion.circle 
+                key={i} 
+                cx="32" 
+                r="12" 
+                fill="none" 
+                stroke="#FFD700" 
+                strokeWidth="2" 
+                initial={{ cy: 48, opacity: 0 }} 
+                animate={{ 
+                    cy: [48, 40, 48], // Keyframes for the bounce effect
+                    opacity: [0, 1, 1, 0], // Fade in and out
+                    transition: { 
+                        delay: i * 0.2 + 0.5, 
+                        duration: 1.5, // Total duration of one bounce cycle
+                        ease: "easeInOut", 
+                        repeat: Infinity, 
+                        repeatDelay: 0.5 // Delay before repeating the animation
+                    } 
+                }} 
+            />
         ))}
     </motion.svg>
 );
@@ -622,7 +639,7 @@ const HistoriaPage = () => (
             {/* The content for the dedicated HistoriaPage remains as is, separate from the new section on HomePage */}
             <p className="text-gold-400 font-bold">El Dinero sostiene el sistema que existe hoy en dia, asi que debes saber generarlo, fijate lo simple que es crecer cuando aprendes a cobrar un cero mas! La regla de Abundancia del Cero:</p>
             <p>Puedes partir desde 100 CLP en adelante, yo preferi comenzar con un producto que pueda vender en 10.000 CLP y para hacerlo recopile varias experiencias de vida en mi Libro "ALMA DE EMPRENDEDOR" para compartir mi historia de resiliencia, de superacion personal y de exito comercial.</p>
-            <p>Continuando con esta regla de oro dispuse a la venta mis asesorias comerciales personalizadas por 100.000 CLP en 90 minutos de trabajo personalizando tu estrategia comercial por video llamada, despues logre crear el area de ventas de mis paginas y/o app web desde 300.000 CLP hasta 1.000.000 CLP y varios millones mas dependiendo de la complejidad de la app web.</p>
+            <p>Continuando con esta regla de oro dispuse a la venta mis asesorias comerciales personalizadas por 100.000 CLP en 90 minutos de trabajo personalizando tu estrategia comercial por video llamada, despues logre crear el area de ventas de mis paginas y/o app web desde 300.000 CLP hasta 1.000.000 CLP y varios millones mas dependiendo de la complejidad de la app web. </p>
             <p>Tambien vendo parcelas de 5000m2 de otros dueños sobre los 10.000.000 pero de esas obtengo ganancias en comisiones desde los 2.000.000 CLP, igual tengo en venta en verde el tiempo compartido en el resort tu proximo nivel que construire en mi campo de montaña en Huife, Pucón y lo estoy vendiendo en 3.500.000 CLP, ademas tengo parcelas mias en mi campo donde construire mi resort tu proximo nivel, parcelas de 5000m2 en 28 millones venta en verde, las que costaran 88 millones al estar todo listo.</p>
         </div>
     </PageLayout>
@@ -775,7 +792,7 @@ const AgroecologiaPage = () => {
                             <div key={ep.id}>
                                 <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg">
                                     <iframe src={`https://www.youtube.com/embed/${ep.id}`} title={ep.title} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                                </div>
+                                    </div>
                                 <h4 className="text-xl font-serif text-gold-300 mt-3">{ep.title}</h4>
                                 <p className="text-gray-400 font-sans text-sm">{ep.description}</p>
                             </div>
