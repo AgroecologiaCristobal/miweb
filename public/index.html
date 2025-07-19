@@ -95,7 +95,7 @@ const CursorCasa = () => (
         <motion.rect x="22" y="32" width="20" height="10" fill="#A0522D" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 1.5 }} />
         <motion.rect x="22" y="22" width="20" height="10" fill="#A0522D" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 2.5 }} />
         <motion.path d="M20 22 L 32 12 L 44 22 Z" fill="#D2691E" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 3.0 }} />
-        <motion.div animate={{ transition: { repeat: Infinity, duration: 4 } }} />
+        {/* Removed the problematic motion.div here */}
     </motion.svg>
 );
 const CursorPluma = () => (
