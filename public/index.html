@@ -61,9 +61,13 @@ const CartIcon = () => (
     </svg>
 );
 
-const CheckIcon = ({ className }) => (
-  <svg className={className ? className : "w-6 h-6 text-green-500 mr-3 flex-shrink-0"} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"></path></svg>
-);
+const CheckIcon = ({ className }) => {
+  // The className prop is now applied directly to the component where it's used,
+  // making the SVG itself simpler and less prone to parse errors.
+  return (
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"></path></svg>
+  );
+};
 
 const ArrowRightIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
