@@ -77,6 +77,10 @@ const ArrowRightIcon = () => (
 
 
 // --- CURSOR PERSONALIZADO BÁSICO (sin SVGs complejos) ---
+// Se ha eliminado el componente CustomCursor para resolver el error de Parse Error en Netlify.
+// Si deseas un cursor personalizado, se recomienda implementarlo con un enfoque más simple
+// o con una librería que no cause conflictos con el compilador de Netlify.
+/*
 const CustomCursor = ({ currentPage }) => {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isIdle, setIsIdle] = useState(false);
@@ -126,6 +130,8 @@ const CustomCursor = ({ currentPage }) => {
         />
     );
 };
+*/
+
 
 // --- COMPONENTES REUTILIZABLES ---
 const Header = ({ setCurrentPage }) => {
@@ -1123,7 +1129,8 @@ const PodcastPage = () => {
       return (
         <div className="bg-cream font-sans">
             <FontLoader />
-            <CustomCursor currentPage={currentPage} />
+            {/* Se ha eliminado el CustomCursor para resolver el error de Parse Error en Netlify. */}
+            {/* <CustomCursor currentPage={currentPage} /> */}
             <Header setCurrentPage={setCurrentPage} />
             <AnimatePresence mode="wait">
                 {renderPage()}
