@@ -109,41 +109,19 @@ const GoldCoinCursor = () => {
 // --- COMPONENTE PRINCIPAL DEL CURSOR ---
 const CustomCursor = ({ currentPage }) => {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-    // Eliminadas isIdle y isHovering ya que no se utilizan en la animación actual del cursor
-    // const [isIdle, setIsIdle] = useState(false);
-    // const [isHovering, setIsHovering] = useState(false);
     const idleTimer = useRef(null); // Se mantiene por si se desea añadir lógica de inactividad o hover en el futuro.
 
     useEffect(() => {
         const mouseMove = e => {
             setMousePosition({ x: e.clientX, y: e.clientY });
-            // Eliminada lógica de isIdle y isHovering para resolver advertencias de ESLint
-            // setIsIdle(false);
             clearTimeout(idleTimer.current);
             idleTimer.current = setTimeout(() => { /* setIsIdle(true) */ }, 1000); // Se mantiene el timer pero sin efecto visible
         };
         window.addEventListener("mousemove", mouseMove);
 
-        // Eliminada lógica de eventos de hover para resolver advertencias de ESLint
-        /*
-        const interactiveElements = document.querySelectorAll('button, a, [role="button"]');
-        const onMouseEnter = () => setIsHovering(true);
-        const onMouseLeave = () => setIsHovering(false); 
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', onMouseEnter);
-            el.addEventListener('mouseleave', onMouseLeave); 
-        });
-        */
-
         return () => {
             window.removeEventListener("mousemove", mouseMove);
             clearTimeout(idleTimer.current);
-            /*
-            interactiveElements.forEach(el => {
-                el.removeEventListener('mouseenter', onMouseEnter);
-                el.removeEventListener('mouseleave', onMouseLeave); 
-            });
-            */
         };
     }, []); // currentPage se ha eliminado como dependencia ya que no se usa en la lógica interna del useEffect.
 
@@ -677,10 +655,11 @@ const InmobiliariaPage = () => {
                 <div className="container mx-auto text-center">
                     <h2 className="text-3xl md:text-4xl font-serif text-white mb-12">Explora Nuestras Oportunidades de Inversión</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        <GatewayCard title="Venta en Verde en Lefincul" description="Parcelas exclusivas en un entorno natural privilegiado." videoId="y5dY-bI4W5M" onClick={(e) => scrollToAnchor(e, 'lefincul-verde')} />
-                        <GatewayCard title="Resort del Bienestar" description="Invierte en tiempo compartido en nuestro próximo resort." videoId="vB07-v_2_8s" onClick={(e) => scrollToAnchor(e, 'resort-lefincul')} />
-                        <GatewayCard title="Venta en Verde cerca de Cunco" description="Oportunidades únicas de inversión en una zona con gran potencial." videoId="6-n_4V2Vb3o" onClick={(e) => scrollToAnchor(e, 'cunco-verde')} />
-                        <GatewayCard title="Vista al Lago Colico" description="Parcelas con rol propio y vistas espectaculares al lago." videoId="L4aNmdL3d_Q" onClick={(e) => scrollToAnchor(e, 'colico-lago')} />
+                        {/* Se asigna un videoId genérico a todas las GatewayCard para uniformar el tamaño */}
+                        <GatewayCard title="Venta en Verde en Lefincul" description="Parcelas exclusivas en un entorno natural privilegiado." videoId="dQw4w9WgXcQ" onClick={(e) => scrollToAnchor(e, 'lefincul-verde')} />
+                        <GatewayCard title="Resort del Bienestar" description="Invierte en tiempo compartido en nuestro próximo resort." videoId="dQw4w9WgXcQ" onClick={(e) => scrollToAnchor(e, 'resort-lefincul')} />
+                        <GatewayCard title="Venta en Verde cerca de Cunco" description="Oportunidades únicas de inversión en una zona con gran potencial." videoId="dQw4w9WgXcQ" onClick={(e) => scrollToAnchor(e, 'cunco-verde')} />
+                        <GatewayCard title="Vista al Lago Colico" description="Parcelas con rol propio y vistas espectaculares al lago." videoId="dQw4w9WgXcQ" onClick={(e) => scrollToAnchor(e, 'colico-lago')} />
                     </div>
                 </div>
             </section>
