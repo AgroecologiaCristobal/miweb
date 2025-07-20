@@ -25,9 +25,7 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Estratega.</title>
-    <!-- Ya no se necesita la configuración de Tailwind aquí, se maneja en tailwind.config.js -->
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
-    <!-- <script>...</script> -->
+    <!-- Tailwind CSS CDN is no longer needed here, as it's configured in tailwind.config.js -->
 </head>
 <body>
     <noscript>Necesitas habilitar JavaScript para ejecutar esta aplicación.</noscript>
@@ -42,5 +40,13 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+
+    <!-- Dialogflow Messenger Integration -->
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    <df-messenger
+      chat-title="Cristobal"
+      agent-id="caa41a3b-ffa9-49c2-9b8b-cdcbb9c82ccf"
+      language-code="es"
+    ></df-messenger>
 </body>
 </html>
