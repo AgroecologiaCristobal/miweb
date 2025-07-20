@@ -46,14 +46,18 @@ const ArrowRightIcon = () => (
 const GoldCoinCursor = () => {
     const coinWidth = 20; // Ancho de la moneda
     const coinHeight = 8; // Altura de la moneda (para efecto 3D aplanado)
-    const stackOverlap = 2; // Cuánto se superponen las monedas en la pila
-    const numCoinsInStack = 4; // Número de monedas visibles en la pila estática
-    const numFallingCoins = 3; // Número de monedas que caen en secuencia
+    const stackOverlap = 1; // Cuánto se superponen las monedas en la pila (más pequeño para que se vean apiladas)
+    const initialStackSize = 5; // Número de monedas visibles en la pila inicial
+    const numFallingCoins = 5; // Número de monedas que caen en secuencia
+
+    // Calcula la altura total de la pila visible (base de la pila)
+    const stackBaseY = (initialStackSize - 1) * stackOverlap + coinHeight / 2;
 
     return (
         <motion.div
             className="relative"
-            style={{ width: coinWidth, height: coinWidth + coinHeight * numCoinsInStack }} // Ajustar tamaño del contenedor
+            // Ajustar altura del contenedor para que las monedas caídas no lo desborden
+            style={{ width: coinWidth, height: stackBaseY + coinWidth + (numFallingCoins * stackOverlap) }} 
         >
             {/* Definiciones de gradiente y filtro de sombra para las monedas */}
             <svg width="0" height="0">
@@ -69,8 +73,8 @@ const GoldCoinCursor = () => {
                 </defs>
             </svg>
 
-            {/* Pila de monedas estáticas */}
-            {[...Array(numCoinsInStack)].map((_, i) => (
+            {/* Pila de monedas estáticas inicial */}
+            {[...Array(initialStackSize)].map((_, i) => (
                 <svg key={`stack-${i}`} className="absolute" style={{ top: i * stackOverlap, left: 0 }} width={coinWidth} height={coinHeight}>
                     <ellipse cx={coinWidth / 2} cy={coinHeight / 2} rx={coinWidth / 2} ry={coinHeight / 2} fill="url(#goldGradient)" filter="url(#coinShadow)" />
                 </svg>
@@ -86,15 +90,16 @@ const GoldCoinCursor = () => {
                     height={coinHeight}
                     initial={{ y: -coinWidth * 2, opacity: 0, rotateX: 0, scale: 0.8 }} // Inicia arriba, transparente, sin rotación
                     animate={{
-                        y: [ -coinWidth * 2, coinHeight * (numCoinsInStack - 1) - (coinHeight / 2) + (i * stackOverlap * 0.5) ], // Cae hasta la parte superior de la pila, con ligero offset
-                        opacity: [0, 1, 1, 0], // Aparece, se mantiene, se desvanece
-                        rotateX: [0, 90, 90, 0], // Rota para caer plana
+                        // Cae hasta la posición de la pila + el índice de la moneda, simulando apilamiento
+                        y: [ -coinWidth * 2, stackBaseY + (i * stackOverlap) ], 
+                        opacity: [0, 1, 1], // Aparece y se mantiene visible
+                        rotateX: [0, 90, 90], // Rota para caer plana
                         transition: {
-                            delay: i * 0.5, // Retraso para que caigan en secuencia
-                            duration: 1.2, // Duración de la caída
+                            delay: i * 0.3, // Retraso para que caigan en secuencia (más rápido)
+                            duration: 0.8, // Duración de la caída (más rápido)
                             ease: ["easeIn", "linear", "easeOut"], // Aceleración, lineal, desaceleración
                             repeat: Infinity, // Repite infinitamente
-                            repeatDelay: numFallingCoins * 0.5 // Retraso antes de que la secuencia se repita
+                            repeatDelay: numFallingCoins * 0.3 // Retraso antes de que la secuencia se repita
                         }
                     }}
                 >
@@ -115,7 +120,7 @@ const CustomCursor = ({ currentPage }) => {
         const mouseMove = e => {
             setMousePosition({ x: e.clientX, y: e.clientY });
             clearTimeout(idleTimer.current);
-            idleTimer.current = setTimeout(() => { /* setIsIdle(true) */ }, 1000); // Se mantiene el timer pero sin efecto visible
+            idleTimer.current = setTimeout(() => { /* Lógica de inactividad si se necesita */ }, 1000); 
         };
         window.addEventListener("mousemove", mouseMove);
 
@@ -123,7 +128,7 @@ const CustomCursor = ({ currentPage }) => {
             window.removeEventListener("mousemove", mouseMove);
             clearTimeout(idleTimer.current);
         };
-    }, []); // currentPage se ha eliminado como dependencia ya que no se usa en la lógica interna del useEffect.
+    }, []); 
 
     // Renderiza el GoldCoinCursor en la posición del ratón
     return (
@@ -463,56 +468,56 @@ const HomePage = ({ setCurrentPage }) => {
         subtitle: "Aprende a ser sustentable y agroecológico con mi área dedicada.",
         description: "Vuelve a la tierra y cultiva un futuro sustentable.",
         page: 'agroecologia',
-        videoId: '5-qI0m_Qp1M' // Placeholder video ID
+        videoId: 'b_t0wK-l_lQ' // Video ID genérico y funcional
     },
     {
         title: "Proyectos Inmobiliarios",
         subtitle: "Avanza en tus inversiones con la sección inmobiliaria, diseñada para ti.",
         description: "Invierte en activos reales con plusvalía garantizada.",
         page: 'inmobiliaria',
-        videoId: 'y5dY-bI4W5M' // Placeholder video ID
+        videoId: 'b_t0wK-l_lQ' // Video ID genérico y funcional
     },
     {
         title: "Plataformas Web",
         subtitle: "Construye tu motor digital y potencia tu negocio con soluciones web a medida.",
         description: "Construyo el motor digital que tu negocio necesita.",
         page: 'servicios-web',
-        videoId: 'C-y70ZOSzE0' // Placeholder video ID
+        videoId: 'b_t0wK-l_lQ' // Video ID genérico y funcional
     },
     {
         title: "Podcast 'Alma de Estratega'",
         subtitle: "Escucha lecciones prácticas para forjar tu propia abundancia en mi podcast.",
         description: "Lecciones prácticas para forjar tu propia abundancia.",
         page: 'podcast',
-        videoId: 'vB07-v_2_8s' // Placeholder video ID
+        videoId: 'b_t0wK-l_lQ' // Video ID genérico y funcional
     },
     {
         title: "Asesorías Comerciales",
         subtitle: "Accede a mi experiencia para diseñar tu plan de crecimiento personalizado.",
         description: "Accede a mi experiencia para diseñar tu plan de crecimiento.",
         page: 'asesorias',
-        videoId: '6-n_4V2Vb3o' // Placeholder video ID
+        videoId: 'b_t0wK-l_lQ' // Video ID genérico y funcional
     },
     {
         title: "Activos Digitales",
         subtitle: "Adquiere mi libro y herramientas digitales para acelerar tu camino.",
         description: "Adquiere mi libro y herramientas para acelerar tu camino.",
         page: 'activos-digitales',
-        videoId: 'L4aNmdL3d_Q' // Placeholder video ID
+        videoId: 'b_t0wK-l_lQ' // Video ID genérico y funcional
     },
     {
         title: "Tiempo Compartido", // Title for the new card
         subtitle: "Invierte en tu bienestar futuro y alcanza tu próxima versión en nuestro resort de tiempo compartido.", // Updated subtitle for the new card
         description: "Sé parte de nuestro exclusivo resort de bienestar. Adquiere tu tiempo compartido y asegura vacaciones de lujo.",
         page: 'tiempo-compartido',
-        videoId: 'L4aNmdL3d_Q' // Placeholder video ID for Tiempo Compartido
+        videoId: 'b_t0wK-l_lQ' // Video ID genérico y funcional
     },
     {
         title: "En Contacto",
         subtitle: "Conoce mi gestión como Presidente de nuestro Club Deportivo Social y Cultural 'La Gran Familia' en Pucón.",
         description: "Ponte en contacto para saber más sobre mi trabajo comunitario y cómo puedes unirte.",
         page: 'contacto',
-        videoId: 'L4aNmdL3d_Q' // Placeholder video ID for En Contacto
+        videoId: 'b_t0wK-l_lQ' // Video ID genérico y funcional
     },
   ];
 
@@ -656,10 +661,10 @@ const InmobiliariaPage = () => {
                     <h2 className="text-3xl md:text-4xl font-serif text-white mb-12">Explora Nuestras Oportunidades de Inversión</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {/* Se asigna un videoId genérico a todas las GatewayCard para uniformar el tamaño */}
-                        <GatewayCard title="Venta en Verde en Lefincul" description="Parcelas exclusivas en un entorno natural privilegiado." videoId="dQw4w9WgXcQ" onClick={(e) => scrollToAnchor(e, 'lefincul-verde')} />
-                        <GatewayCard title="Resort del Bienestar" description="Invierte en tiempo compartido en nuestro próximo resort." videoId="dQw4w9WgXcQ" onClick={(e) => scrollToAnchor(e, 'resort-lefincul')} />
-                        <GatewayCard title="Venta en Verde cerca de Cunco" description="Oportunidades únicas de inversión en una zona con gran potencial." videoId="dQw4w9WgXcQ" onClick={(e) => scrollToAnchor(e, 'cunco-verde')} />
-                        <GatewayCard title="Vista al Lago Colico" description="Parcelas con rol propio y vistas espectaculares al lago." videoId="dQw4w9WgXcQ" onClick={(e) => scrollToAnchor(e, 'colico-lago')} />
+                        <GatewayCard title="Venta en Verde en Lefincul" description="Parcelas exclusivas en un entorno natural privilegiado." videoId="b_t0wK-l_lQ" onClick={(e) => scrollToAnchor(e, 'lefincul-verde')} />
+                        <GatewayCard title="Resort del Bienestar" description="Invierte en tiempo compartido en nuestro próximo resort." videoId="b_t0wK-l_lQ" onClick={(e) => scrollToAnchor(e, 'resort-lefincul')} />
+                        <GatewayCard title="Venta en Verde cerca de Cunco" description="Oportunidades únicas de inversión en una zona con gran potencial." videoId="b_t0wK-l_lQ" onClick={(e) => scrollToAnchor(e, 'cunco-verde')} />
+                        <GatewayCard title="Vista al Lago Colico" description="Parcelas con rol propio y vistas espectaculares al lago." videoId="b_t0wK-l_lQ" onClick={(e) => scrollToAnchor(e, 'colico-lago')} />
                     </div>
                 </div>
             </section>
